@@ -25,7 +25,7 @@ public class MesaController {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "A mesa de id: " + idMesa + " não foi encontrado"
+                                "A mesa de id " + idMesa + " não foi encontrado"
                         )
                 );
     }
@@ -58,7 +58,7 @@ public class MesaController {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "A mesa de id: " + idMesa + " não foi encontrada"
+                                "A mesa de id " + idMesa + " não foi encontrada"
                         )
                 );
     }
@@ -75,7 +75,7 @@ public class MesaController {
                 }).orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "A mesa de id: " + idMesa + " não foi encontrada"
+                                "A mesa de id " + idMesa + " não foi encontrada"
                         )
                 );
     }

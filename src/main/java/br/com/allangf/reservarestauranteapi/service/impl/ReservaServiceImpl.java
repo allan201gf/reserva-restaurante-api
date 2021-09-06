@@ -42,7 +42,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .findById(idCliente)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "O cliente de id: " + idCliente + " não foi encontrado"));
+                                "O cliente de id " + idCliente + " não foi encontrado"));
 
         int idMesa = reservaDTO.getMesa();
 
@@ -50,7 +50,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .findById(idMesa)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "A mesa de id: " + idMesa + " não foi encontrada"));
+                                "A mesa de id " + idMesa + " não foi encontrada"));
 
 
         LocalDate dataformatada = converterData(reservaDTO.getDiaReservado());
@@ -63,12 +63,11 @@ public class ReservaServiceImpl implements ReservaService {
             if (periodo.getMesa().equals(mesa) && periodo.getDiaReservado().equals(dataformatada)) {
 
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Esta mesa ja está reservada para outro cliente");
+                        "A mesa de id " + periodo.getMesa().getIdMesa() + " ja está reservada para o dia " + periodo.getDiaReservado());
 
             }
 
         }
-
 
         PeriodoDaReserva periodoDaReserva = periodoDaReservaRepository
                 .findById(createPeriodoReserva(dataformatada, mesa))
@@ -76,17 +75,12 @@ public class ReservaServiceImpl implements ReservaService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         Reserva reserva = new Reserva();
-
         reserva.setCliente(cliente);
         reserva.setMesa(mesa);
-
         reserva.setPeriodoDaReserva(periodoDaReserva);
-
         reserva.setDataReservaCriada(LocalDate.now());
         reserva.setStauts(StatusPedido.RESERVADO);
-
         reservaRrepository.save(reserva);
-
         return reserva;
 
     }
@@ -96,9 +90,7 @@ public class ReservaServiceImpl implements ReservaService {
         PeriodoDaReserva periodoDaReserva = new PeriodoDaReserva();
         periodoDaReserva.setDiaReservado(date);
         periodoDaReserva.setMesa(mesa);
-
         periodoDaReservaRepository.save(periodoDaReserva);
-
         return periodoDaReserva.getIdPeriodoDaReserva();
 
     }
@@ -112,7 +104,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "A reserva: " + id + " não foi encontrada"
+                                "A reserva de id " + id + " não foi encontrada"
                         )
                 );
     }

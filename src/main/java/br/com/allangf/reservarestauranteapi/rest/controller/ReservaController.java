@@ -34,7 +34,7 @@ public class ReservaController {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "A reserva de id: " + idReserva +" não foi encontrado"
+                                "A reserva de id " + idReserva +" não foi encontrado"
                         )
                 );
     }

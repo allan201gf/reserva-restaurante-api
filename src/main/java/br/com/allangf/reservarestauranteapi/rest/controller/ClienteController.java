@@ -25,7 +25,7 @@ public class ClienteController {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "O cliente de id: " + idCliente + " não foi encontrado"
+                                "O cliente de id " + idCliente + " não foi encontrado"
                         )
                 );
     }
@@ -61,7 +61,7 @@ public class ClienteController {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "O cliente de id: " + id + " não foi encontrado"
+                                "O cliente de id " + id + " não foi encontrado"
                         )
                 );
     }
@@ -88,7 +88,7 @@ public class ClienteController {
                 }).orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "O cliente de id: " + id + " não foi encontrado"
+                                "O cliente de id " + id + " não foi encontrado"
                         )
                 );
     }

@@ -45,7 +45,6 @@ public class MesaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mesa createMesa(@RequestBody Mesa mesa) {
-        mesa.setStautsMesa(StatusMesa.DISPONIVEL);
         return mesaRepository.save(mesa);
     }
 

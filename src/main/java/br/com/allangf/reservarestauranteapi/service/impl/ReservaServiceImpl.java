@@ -2,11 +2,13 @@ package br.com.allangf.reservarestauranteapi.service.impl;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
+import br.com.allangf.reservarestauranteapi.domain.entity.PeriodoDaReserva;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
 import br.com.allangf.reservarestauranteapi.domain.enums.StatusMesa;
 import br.com.allangf.reservarestauranteapi.domain.enums.StatusPedido;
 import br.com.allangf.reservarestauranteapi.domain.repository.ClienteRepository;
 import br.com.allangf.reservarestauranteapi.domain.repository.MesaRepository;
+import br.com.allangf.reservarestauranteapi.domain.repository.PeriodoDaReservaRepository;
 import br.com.allangf.reservarestauranteapi.domain.repository.ReservaRepository;
 import br.com.allangf.reservarestauranteapi.rest.dto.ReservaDTO;
 import br.com.allangf.reservarestauranteapi.service.ReservaService;
@@ -17,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class ReservaServiceImpl implements ReservaService {
     private final ReservaRepository reservaRrepository;
     private final ClienteRepository clienteRepository;
     private final MesaRepository mesaRepository;
+    private final PeriodoDaReservaRepository periodoDaReservaRepository;
 
 
     @Override
@@ -48,19 +53,36 @@ public class ReservaServiceImpl implements ReservaService {
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "A mesa de id: " + idMesa + " não foi encontrada"));
 
-        if (mesa.getStautsMesa() != StatusMesa.DISPONIVEL) {
 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Esta mesa ja está reservada para outro cliente");
+        LocalDate dataformatada = converterData(reservaDTO.getDiaReservado());
+
+        //Validação por mesa e dia
+        List<PeriodoDaReserva> todosOsPeriodos = periodoDaReservaRepository.findAll();
+
+        for (PeriodoDaReserva periodo: todosOsPeriodos) {
+
+            if (periodo.getMesa().equals(mesa) && periodo.getDiaReservado().equals(dataformatada)) {
+
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Esta mesa ja está reservada para outro cliente");
+
+            }
 
         }
 
-        mesa.setStautsMesa(StatusMesa.RESERVADA);
+
+        PeriodoDaReserva periodoDaReserva = periodoDaReservaRepository
+                .findById(createPeriodoReserva(dataformatada, mesa))
+                .orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         Reserva reserva = new Reserva();
+
         reserva.setCliente(cliente);
         reserva.setMesa(mesa);
-        reserva.setDiaReservado(reservaDTO.getDiaReservado());
+
+        reserva.setPeriodoDaReserva(periodoDaReserva);
+
         reserva.setDataReservaCriada(LocalDate.now());
         reserva.setStauts(StatusPedido.RESERVADO);
 
@@ -68,6 +90,37 @@ public class ReservaServiceImpl implements ReservaService {
 
         return reserva;
 
+    }
+
+    public int createPeriodoReserva(LocalDate date, Mesa mesa) {
+
+        PeriodoDaReserva periodoDaReserva = new PeriodoDaReserva();
+        periodoDaReserva.setDiaReservado(date);
+        periodoDaReserva.setMesa(mesa);
+
+        periodoDaReservaRepository.save(periodoDaReserva);
+
+        return periodoDaReserva.getIdPeriodoDaReserva();
+
+    }
+
+    public void deletePeriodoReserva(int id) {
+        periodoDaReservaRepository.findById(id)
+                .map(periodoEncontrado -> {
+                    periodoDaReservaRepository.delete(periodoEncontrado);
+                    return periodoEncontrado;
+                })
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "A reserva: " + id + " não foi encontrada"
+                        )
+                );
+    }
+
+    public LocalDate converterData (String data) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(data, formato);
     }
 
     @Override
@@ -83,8 +136,10 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public void deleteReserva(int idReserva) {
 
+        AtomicInteger idPeriodoReserva = new AtomicInteger();
+
         reservaRrepository.findById(idReserva).map(reserva -> {
-            reserva.getMesa().setStautsMesa(StatusMesa.DISPONIVEL);
+            idPeriodoReserva.set(reserva.getPeriodoDaReserva().getIdPeriodoDaReserva());
             return reserva;
         });
 
@@ -99,6 +154,9 @@ public class ReservaServiceImpl implements ReservaService {
                                 "A reserva de id " + idReserva + " não foi encontrada"
                         )
                 );
+
+            deletePeriodoReserva(idPeriodoReserva.get());
+
 
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,8 +21,6 @@ public class Mesa {
 
     private String nomeMesa;
 
-    @Enumerated(EnumType.STRING)
-    private StatusMesa stautsMesa;
 
     /*
     * TODO

@@ -26,8 +26,9 @@ public class Reserva {
     @Column(name="dataReservaCriada")
     private LocalDate dataReservaCriada;
 
-    @Column(name="diaReservado")
-    private String diaReservado;
+    @ManyToOne
+    @JoinColumn(name = "periodoDaReserva")
+    private PeriodoDaReserva periodoDaReserva;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")

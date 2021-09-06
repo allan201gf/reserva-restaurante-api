@@ -4,7 +4,6 @@ import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
 import br.com.allangf.reservarestauranteapi.domain.entity.PeriodoDaReserva;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
-import br.com.allangf.reservarestauranteapi.domain.enums.StatusMesa;
 import br.com.allangf.reservarestauranteapi.domain.enums.StatusPedido;
 import br.com.allangf.reservarestauranteapi.domain.repository.ClienteRepository;
 import br.com.allangf.reservarestauranteapi.domain.repository.MesaRepository;

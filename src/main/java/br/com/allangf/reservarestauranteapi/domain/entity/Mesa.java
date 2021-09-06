@@ -1,12 +1,10 @@
 package br.com.allangf.reservarestauranteapi.domain.entity;
 
-import br.com.allangf.reservarestauranteapi.domain.enums.StatusMesa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data

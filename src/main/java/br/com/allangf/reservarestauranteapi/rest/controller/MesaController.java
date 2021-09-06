@@ -1,7 +1,6 @@
 package br.com.allangf.reservarestauranteapi.rest.controller;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
-import br.com.allangf.reservarestauranteapi.domain.enums.StatusMesa;
 import br.com.allangf.reservarestauranteapi.domain.repository.MesaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

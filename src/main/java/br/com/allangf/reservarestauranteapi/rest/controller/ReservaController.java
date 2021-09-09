@@ -1,5 +1,6 @@
 package br.com.allangf.reservarestauranteapi.rest.controller;
 
+import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
 import br.com.allangf.reservarestauranteapi.service.ReservaService;
 import br.com.allangf.reservarestauranteapi.rest.dto.ReservaDTO;
@@ -48,7 +49,6 @@ public class ReservaController {
     public void deleteReservaById(@PathVariable int idReserva) {
         reservaService.deleteReserva(idReserva);
     }
-
 
 
 

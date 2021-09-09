@@ -1,5 +1,6 @@
 package br.com.allangf.reservarestauranteapi.service;
 
+import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
 import br.com.allangf.reservarestauranteapi.rest.dto.ReservaDTO;
 

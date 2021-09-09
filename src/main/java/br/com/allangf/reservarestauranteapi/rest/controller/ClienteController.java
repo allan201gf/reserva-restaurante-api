@@ -93,5 +93,14 @@ public class ClienteController {
                 );
     }
 
+    // Buscas com Query personalizados
+
+    @GetMapping("/query/{nomeCliente}")
+    public List<Cliente> buscaPorNomeCliente(@PathVariable String nomeCliente) {
+        List<Cliente> clientesEncontrados = clienteRepository.buscaPorNomeCliente(nomeCliente);
+        return clientesEncontrados;
+    }
+
+
 
 }

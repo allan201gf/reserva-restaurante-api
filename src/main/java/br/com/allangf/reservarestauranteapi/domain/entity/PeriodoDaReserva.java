@@ -19,6 +19,7 @@ public class PeriodoDaReserva {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idPeriodoDaReserva;
 
+    @Column(name="dia_reservado")
     private LocalDate diaReservado;
 
     @ManyToOne

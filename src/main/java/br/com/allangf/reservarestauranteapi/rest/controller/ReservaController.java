@@ -51,5 +51,10 @@ public class ReservaController {
     }
 
 
+    @GetMapping("/reservasPorData")
+    public List<Reserva> reservasDoDia() {
+        return reservaService.reservasPorData();
+    }
+
 
 }

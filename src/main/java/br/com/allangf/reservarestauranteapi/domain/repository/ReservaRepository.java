@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
 
-    @Query("select p from Reserva p where p.periodoDaReserva like :hoje")
-    List<Reserva> reservasDeHoje(LocalDate hoje);
+    @Query("select p from Reserva p where p.periodoDaReserva.diaReservado like :hoje")
+    List<Reserva> reservasPorData(LocalDate hoje);
 
 }

@@ -150,4 +150,10 @@ public class ReservaServiceImpl implements ReservaService {
 
 
     }
+
+    @Override
+    public List<Reserva> reservasPorData() {
+        LocalDate hoje = LocalDate.now();
+        return reservaRrepository.reservasPorData(hoje);
+    }
 }

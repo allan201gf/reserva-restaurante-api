@@ -17,4 +17,6 @@ public interface ReservaService {
 
     void deleteReserva(int id);
 
+    List<Reserva> reservasPorData();
+
 }

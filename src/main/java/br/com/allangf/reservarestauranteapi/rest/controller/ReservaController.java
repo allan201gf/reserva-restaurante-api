@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -54,6 +55,11 @@ public class ReservaController {
     @GetMapping("/reservasPorData")
     public List<Reserva> reservasDoDia() {
         return reservaService.reservasPorData();
+    }
+
+    @GetMapping("/reservasPorData/{dataInicio}/{dataFim}")
+    public List<Reserva> reservasPorData(@PathVariable String dataInicio, @PathVariable String dataFim) {
+        return reservaService.reservasPorData(dataInicio, dataFim);
     }
 
 

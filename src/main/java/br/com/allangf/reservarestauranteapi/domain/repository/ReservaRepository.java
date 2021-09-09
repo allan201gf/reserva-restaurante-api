@@ -12,4 +12,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
     @Query("select p from Reserva p where p.periodoDaReserva.diaReservado like :hoje")
     List<Reserva> reservasPorData(LocalDate hoje);
 
+    @Query("select p from Reserva p where p.periodoDaReserva.diaReservado >=:dataInicio and p.periodoDaReserva.diaReservado <=:dataFim")
+    List<Reserva> reservasPorData(LocalDate dataInicio, LocalDate dataFim);
+
 }

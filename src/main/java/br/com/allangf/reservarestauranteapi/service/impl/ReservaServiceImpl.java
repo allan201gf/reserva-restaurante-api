@@ -148,7 +148,6 @@ public class ReservaServiceImpl implements ReservaService {
 
             deletePeriodoReserva(idPeriodoReserva.get());
 
-
     }
 
     @Override
@@ -156,4 +155,19 @@ public class ReservaServiceImpl implements ReservaService {
         LocalDate hoje = LocalDate.now();
         return reservaRrepository.reservasPorData(hoje);
     }
+
+    @Override
+    public List<Reserva> reservasPorData(String dataInicio, String dataFim) {
+
+        LocalDate dataInicioFormatada = converterDataComTraco(dataInicio);
+        LocalDate dataFimFormatada = converterDataComTraco(dataFim);
+
+        return reservaRrepository.reservasPorData(dataInicioFormatada, dataFimFormatada);
+    }
+
+    public LocalDate converterDataComTraco (String data) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return LocalDate.parse(data, formato);
+    }
+
 }

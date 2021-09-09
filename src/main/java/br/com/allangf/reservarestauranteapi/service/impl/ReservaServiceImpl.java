@@ -55,7 +55,8 @@ public class ReservaServiceImpl implements ReservaService {
 
         LocalDate dataformatada = converterData(reservaDTO.getDiaReservado());
 
-        //Validação por mesa e dia
+        // validação dentro do método salvar para verificar se a mesa já está reservada no dia e horá desejado
+
         List<PeriodoDaReserva> todosOsPeriodos = periodoDaReservaRepository.findAll();
 
         for (PeriodoDaReserva periodo: todosOsPeriodos) {
@@ -85,6 +86,8 @@ public class ReservaServiceImpl implements ReservaService {
 
     }
 
+    // Método auxiliar para a criação de uma nova mesa, cria um objeto PeriodoReserva para armazenar dia e mesa da reserva
+
     public int createPeriodoReserva(LocalDate date, Mesa mesa) {
 
         PeriodoDaReserva periodoDaReserva = new PeriodoDaReserva();
@@ -94,6 +97,8 @@ public class ReservaServiceImpl implements ReservaService {
         return periodoDaReserva.getIdPeriodoDaReserva();
 
     }
+
+    // Método para deletar um periodo de reserva que é executado após deletar uma reserva (faz com que a mesa não fique travada após deletar uma reserva)
 
     public void deletePeriodoReserva(int id) {
         periodoDaReservaRepository.findById(id)
@@ -109,6 +114,8 @@ public class ReservaServiceImpl implements ReservaService {
                 );
     }
 
+    // Converte data no formato com barras para o formato LocalDate
+
     public LocalDate converterData (String data) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(data, formato);
@@ -123,6 +130,8 @@ public class ReservaServiceImpl implements ReservaService {
     public List<Reserva> obterTodasAsReservas() {
         return reservaRrepository.findAll();
     }
+
+    // Método para deletar uma reserva e chama o método para deletar o periodo da reserva acima
 
     @Override
     public void deleteReserva(int idReserva) {
@@ -164,6 +173,8 @@ public class ReservaServiceImpl implements ReservaService {
 
         return reservaRrepository.reservasPorData(dataInicioFormatada, dataFimFormatada);
     }
+
+    // Converte data no formato com tracos para o formato LocalDate
 
     public LocalDate converterDataComTraco (String data) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");

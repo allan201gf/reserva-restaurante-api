@@ -168,10 +168,18 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public List<Reserva> reservasPorData(String dataInicio, String dataFim) {
 
-        LocalDate dataInicioFormatada = converterDataComTraco(dataInicio);
-        LocalDate dataFimFormatada = converterDataComTraco(dataFim);
+        LocalDate hoje = LocalDate.now();
 
-        return reservaRrepository.reservasPorData(dataInicioFormatada, dataFimFormatada);
+        if (dataInicio.equals("hoje") && dataFim.equals("hoje") ) {
+            return reservaRrepository.reservasPorData(hoje);
+        } else {
+
+            LocalDate dataInicioFormatada = converterDataComTraco(dataInicio);
+            LocalDate dataFimFormatada = converterDataComTraco(dataFim);
+
+            return reservaRrepository.reservasPorData(dataInicioFormatada, dataFimFormatada);
+
+        }
     }
 
     // Converte data no formato com tracos para o formato LocalDate

@@ -53,12 +53,7 @@ public class ReservaController {
 
 
     @GetMapping("/reservasPorData")
-    public List<Reserva> reservasDoDia() {
-        return reservaService.reservasPorData();
-    }
-
-    @GetMapping("/reservasPorData/{dataInicio}/{dataFim}")
-    public List<Reserva> reservasPorData(@PathVariable String dataInicio, @PathVariable String dataFim) {
+    public List<Reserva> reservasPorData(@RequestParam(value = "dataInicio", defaultValue = "hoje") String dataInicio, @RequestParam(value = "dataFim", defaultValue = "hoje") String dataFim) {
         return reservaService.reservasPorData(dataInicio, dataFim);
     }
 

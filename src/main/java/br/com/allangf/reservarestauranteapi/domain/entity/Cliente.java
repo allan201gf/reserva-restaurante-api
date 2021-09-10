@@ -26,7 +26,7 @@ public class Cliente {
     @Column(name="sobrenomeCliente", length = 100)
     private String sobrenomeCliente;
 
-    @Column(name="CPFCliente")
+    @Column(name="CPFCliente", unique = true)
     @CPF
     private String cpfCliente;
 

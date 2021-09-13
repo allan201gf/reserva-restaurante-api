@@ -26,10 +26,6 @@ public class Reserva {
     @Column(name="dataReservaCriada")
     private LocalDate dataReservaCriada;
 
-//    @ManyToOne
-//    @JoinColumn(name = "periodoDaReserva")
-//    private PeriodoDaReserva periodoDaReserva;
-
     @Column(name = "dia_reservado")
     private LocalDate diaReservado;
 

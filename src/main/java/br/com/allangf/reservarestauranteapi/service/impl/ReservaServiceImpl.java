@@ -2,12 +2,10 @@ package br.com.allangf.reservarestauranteapi.service.impl;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
-import br.com.allangf.reservarestauranteapi.domain.entity.PeriodoDaReserva;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
 import br.com.allangf.reservarestauranteapi.domain.enums.StatusPedido;
 import br.com.allangf.reservarestauranteapi.domain.repository.ClienteRepository;
 import br.com.allangf.reservarestauranteapi.domain.repository.MesaRepository;
-import br.com.allangf.reservarestauranteapi.domain.repository.PeriodoDaReservaRepository;
 import br.com.allangf.reservarestauranteapi.domain.repository.ReservaRepository;
 import br.com.allangf.reservarestauranteapi.rest.dto.ReservaDTO;
 import br.com.allangf.reservarestauranteapi.service.ReservaService;
@@ -21,7 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,6 @@ public class ReservaServiceImpl implements ReservaService {
     private final ReservaRepository reservaRrepository;
     private final ClienteRepository clienteRepository;
     private final MesaRepository mesaRepository;
-    private final PeriodoDaReservaRepository periodoDaReservaRepository;
 
 
     @Override
@@ -57,61 +53,28 @@ public class ReservaServiceImpl implements ReservaService {
 
         // validação dentro do método salvar para verificar se a mesa já está reservada no dia e horá desejado
 
-        List<PeriodoDaReserva> todosOsPeriodos = periodoDaReservaRepository.findAll();
+        //TODO
 
-        for (PeriodoDaReserva periodo: todosOsPeriodos) {
+        List<Reserva> todasAsReservas = reservaRrepository.findAll();
 
-            if (periodo.getMesa().equals(mesa) && periodo.getDiaReservado().equals(dataformatada)) {
+        for (Reserva reserva: todasAsReservas) {
 
+            if (reserva.getMesa().equals(mesa) && reserva.getDiaReservado().equals(dataformatada)) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "A mesa de id " + periodo.getMesa().getIdMesa() + " ja está reservada para o dia " + periodo.getDiaReservado());
-
+                        "A mesa " + reserva.getMesa().getNomeMesa() + " de id " + reserva.getMesa().getIdMesa() + " já está reservada para o dia " + reserva.getDiaReservado());
             }
 
         }
 
-        PeriodoDaReserva periodoDaReserva = periodoDaReservaRepository
-                .findById(createPeriodoReserva(dataformatada, mesa))
-                .orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
-
         Reserva reserva = new Reserva();
         reserva.setCliente(cliente);
         reserva.setMesa(mesa);
-        reserva.setPeriodoDaReserva(periodoDaReserva);
+        reserva.setDiaReservado(dataformatada);
         reserva.setDataReservaCriada(LocalDate.now());
         reserva.setStauts(StatusPedido.RESERVADO);
         reservaRrepository.save(reserva);
         return reserva;
 
-    }
-
-    // Método auxiliar para a criação de uma nova mesa, cria um objeto PeriodoReserva para armazenar dia e mesa da reserva
-
-    public int createPeriodoReserva(LocalDate date, Mesa mesa) {
-
-        PeriodoDaReserva periodoDaReserva = new PeriodoDaReserva();
-        periodoDaReserva.setDiaReservado(date);
-        periodoDaReserva.setMesa(mesa);
-        periodoDaReservaRepository.save(periodoDaReserva);
-        return periodoDaReserva.getIdPeriodoDaReserva();
-
-    }
-
-    // Método para deletar um periodo de reserva que é executado após deletar uma reserva (faz com que a mesa não fique travada após deletar uma reserva)
-
-    public void deletePeriodoReserva(int id) {
-        periodoDaReservaRepository.findById(id)
-                .map(periodoEncontrado -> {
-                    periodoDaReservaRepository.delete(periodoEncontrado);
-                    return periodoEncontrado;
-                })
-                .orElseThrow(
-                        () -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "A reserva de id " + id + " não foi encontrada"
-                        )
-                );
     }
 
     // Converte data no formato com barras para o formato LocalDate
@@ -136,13 +99,6 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public void deleteReserva(int idReserva) {
 
-        AtomicInteger idPeriodoReserva = new AtomicInteger();
-
-        reservaRrepository.findById(idReserva).map(reserva -> {
-            idPeriodoReserva.set(reserva.getPeriodoDaReserva().getIdPeriodoDaReserva());
-            return reserva;
-        });
-
         reservaRrepository.findById(idReserva)
                 .map(reserva -> {
                     reservaRrepository.delete(reserva);
@@ -154,8 +110,6 @@ public class ReservaServiceImpl implements ReservaService {
                                 "A reserva de id " + idReserva + " não foi encontrada"
                         )
                 );
-
-            deletePeriodoReserva(idPeriodoReserva.get());
 
     }
 

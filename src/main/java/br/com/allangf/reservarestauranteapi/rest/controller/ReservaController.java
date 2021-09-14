@@ -1,6 +1,7 @@
 package br.com.allangf.reservarestauranteapi.rest.controller;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
+import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
 import br.com.allangf.reservarestauranteapi.domain.entity.Reserva;
 import br.com.allangf.reservarestauranteapi.service.ReservaService;
 import br.com.allangf.reservarestauranteapi.rest.dto.ReservaDTO;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,6 +57,11 @@ public class ReservaController {
     @GetMapping("/reservasPorData")
     public List<Reserva> reservasPorData(@RequestParam(value = "dataInicio", defaultValue = "hoje") String dataInicio, @RequestParam(value = "dataFim", defaultValue = "hoje") String dataFim) {
         return reservaService.reservasPorData(dataInicio, dataFim);
+    }
+
+    @GetMapping("/mesasDisponiveis")
+    public List<Mesa> mesasDisponiveis(@RequestParam(value = "dia", defaultValue = "hoje") String data) {
+        return reservaService.mesasDisponiveis(data);
     }
 
 

@@ -17,8 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -134,6 +136,34 @@ public class ReservaServiceImpl implements ReservaService {
             return reservaRrepository.reservasPorData(dataInicioFormatada, dataFimFormatada);
 
         }
+    }
+
+    @Override
+    public List<Mesa> mesasDisponiveis(String data) {
+
+        LocalDate dataFormatada;
+
+        if (data.equals("hoje")) {
+            dataFormatada = LocalDate.now();
+        } else {
+            dataFormatada = converterDataComTraco(data);
+        }
+
+        List<Mesa> todasAsMesas = mesaRepository.findAll();
+        List<Reserva> reservasDaData = reservaRrepository.reservasPorData(dataFormatada);
+        List<Mesa> mesasDisponiveis = new ArrayList<>();
+
+        for (Mesa mesa: todasAsMesas) {
+
+            int size = (int) reservasDaData.stream().filter(reserva -> {
+                return reserva.getMesa().equals(mesa);
+            }).count();
+
+            if (size == 0) {
+                mesasDisponiveis.add(mesa);
+            }
+        }
+        return mesasDisponiveis;
     }
 
     // Converte data no formato com tracos para o formato LocalDate

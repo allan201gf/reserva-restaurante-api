@@ -2,6 +2,7 @@ package br.com.allangf.reservarestauranteapi.rest.controller;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Mesa;
 import br.com.allangf.reservarestauranteapi.domain.repository.MesaRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +20,7 @@ public class MesaController {
         this.mesaRepository = mesaRepository;
     }
 
+    @ApiOperation("Busca uma mesa por id")
     @GetMapping("{idMesa}")
     public Mesa getMesaById(@PathVariable int idMesa) {
         return mesaRepository
@@ -31,23 +33,27 @@ public class MesaController {
                 );
     }
 
+    @ApiOperation("Listagem de todas as mesas")
     @GetMapping
     public List<Mesa> allMesas() {
         return mesaRepository.findAll();
     }
 
+    @ApiOperation("Listagem de mesas com um nome")
     @GetMapping("/nome/{nomeMesa}")
     public List<Mesa> findByNomeMesaContaining(@PathVariable String nomeMesa) {
         List<Mesa> mesasEncontradas = mesaRepository.findByNomeMesaContaining(nomeMesa);
         return mesasEncontradas;
     }
 
+    @ApiOperation("Criar nova mesa")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mesa createMesa(@RequestBody Mesa mesa) {
         return mesaRepository.save(mesa);
     }
 
+    @ApiOperation("Deleta mesa por id")
     @DeleteMapping("{idMesa}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMesa(@PathVariable int idMesa) {
@@ -64,6 +70,7 @@ public class MesaController {
                 );
     }
 
+    @ApiOperation("Atualizado mesa por id")
     @PutMapping("{idMesa}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMesa(@PathVariable int idMesa,

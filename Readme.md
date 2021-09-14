@@ -6,10 +6,11 @@ Sistema de gerenciamento de clientes e mesas para criação de reservas em um re
 ## 🛠️ Em desenvolvimento com
 
 * [IntelliJ](http://www.dropwizard.io/1.0.2/docs/) - A IDE do ❤️
-* [Maven](https://maven.apache.org/) - Gerente de Dependência
-* [SpringBoot](https://start.spring.io/) - Spring
+* [Maven](https://maven.apache.org/) - Gerenciador de dependências
+* [SpringBoot](https://start.spring.io/) - Framework para aplicações web
 * [H2 DataBase](https://www.h2database.com/html/main.html) - Banco de dados em memória
 * [Lombok](https://projectlombok.org/) - Facilitar a criação de construtores
+* [Swagger](https://swagger.io/tools/open-source/open-source-integrations/) - Listagem endpoints da API
 
 ## 📄 Licença
 

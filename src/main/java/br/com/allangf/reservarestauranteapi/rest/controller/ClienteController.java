@@ -2,6 +2,7 @@ package br.com.allangf.reservarestauranteapi.rest.controller;
 
 import br.com.allangf.reservarestauranteapi.domain.entity.Cliente;
 import br.com.allangf.reservarestauranteapi.domain.repository.ClienteRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +19,7 @@ public class ClienteController {
         this.clienteRepository = clienteRepository;
     }
 
+    @ApiOperation("Listagem de um cliente por id")
     @GetMapping("{idCliente}")
     public Cliente getClienteById(@PathVariable int idCliente) {
         return clienteRepository
@@ -30,23 +32,27 @@ public class ClienteController {
                 );
     }
 
+    @ApiOperation("Listagem de todos os clientes")
     @GetMapping
     public List<Cliente> allClientes() {
         return clienteRepository.findAll();
     }
 
+    @ApiOperation("Listagem de um cliente por nome")
     @GetMapping("/nome/{nomeCliente}")
     public List<Cliente> findByNomeContaining(@PathVariable String nomeCliente) {
         List<Cliente> byNomeContaining = clienteRepository.findByNomeClienteContaining(nomeCliente);
         return byNomeContaining;
     }
 
+    @ApiOperation("Criar novo cliente")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente createCliente(@RequestBody Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
+    @ApiOperation("Deletar cliente por id")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCliente(@PathVariable int id) {
@@ -66,6 +72,7 @@ public class ClienteController {
                 );
     }
 
+    @ApiOperation("Atualizar cliente por id")
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCliente(@PathVariable int id,
@@ -95,6 +102,7 @@ public class ClienteController {
 
     // Buscas com Query personalizados
 
+    @ApiOperation("Listagem de clientes com o mesmo nome")
     @GetMapping("/query/{nomeCliente}")
     public List<Cliente> buscaPorNomeCliente(@PathVariable String nomeCliente) {
         List<Cliente> clientesEncontrados = clienteRepository.buscaPorNomeCliente(nomeCliente);

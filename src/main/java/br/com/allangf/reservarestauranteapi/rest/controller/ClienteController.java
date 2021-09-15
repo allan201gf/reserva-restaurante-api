@@ -77,16 +77,6 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCliente(@PathVariable int id,
                               @RequestBody Cliente cliente) {
-
-/*      TODO
-        Outra forma de fazer o código abaixo
-        cliente.setIdCliente(id);
-        clienteRepository.save(cliente);
-*/
-
-/*      TODO
-        Utilizar os sets para alterar apenas o que foi enviado na requisição, utilizar if ou condição ternaria
-*/
         clienteRepository.findById(id)
                 .map(clienteExistente -> {
                     cliente.setIdCliente(clienteExistente.getIdCliente());

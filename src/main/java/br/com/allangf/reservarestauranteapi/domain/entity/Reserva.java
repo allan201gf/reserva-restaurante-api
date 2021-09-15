@@ -1,6 +1,5 @@
 package br.com.allangf.reservarestauranteapi.domain.entity;
 
-import br.com.allangf.reservarestauranteapi.domain.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,10 +27,6 @@ public class Reserva {
 
     @Column(name = "dia_reservado")
     private LocalDate diaReservado;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="status")
-    private StatusPedido stauts;
 
     @OneToOne
     @JoinColumn(name="mesa_id")

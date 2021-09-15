@@ -73,7 +73,6 @@ public class ReservaServiceImpl implements ReservaService {
         reserva.setMesa(mesa);
         reserva.setDiaReservado(dataformatada);
         reserva.setDataReservaCriada(LocalDate.now());
-        reserva.setStauts(StatusPedido.RESERVADO);
         reservaRrepository.save(reserva);
         return reserva;
 
